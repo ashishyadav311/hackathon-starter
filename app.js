@@ -114,6 +114,19 @@ app.use((req, res, next) => {
     && (req.path === '/account' || req.path.match(/^\/api/))) {
     req.session.returnTo = req.originalUrl;
   }
+  
+  
+    var ip;
+    if (req.headers && req.headers['X-Forwarded-For']) {
+        ip = req.headers['X-Forwarded-For'].split(",")[0];
+    } else if (req.connection && req.connection.remoteAddress) {
+        ip = req.connection.remoteAddress;
+    } else {
+        ip = req.ip;
+    }
+    logger.info("client IP is *********************" + ip);
+    console.log("client IP is *********************" + ip);
+  
   next();
 });
 app.use('/', express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
